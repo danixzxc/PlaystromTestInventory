@@ -79,7 +79,7 @@ namespace Services
             try
             {
                 await UniTask.Delay(
-                    UnityEngine.TimeSpan.FromSeconds(_bonusConfig.BonusDurationSeconds),
+                    TimeSpan.FromSeconds(_bonusConfig.BonusDurationSeconds),
                     cancellationToken: _bonusCts.Token
                 );
                 DeactivateBonus();

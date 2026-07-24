@@ -1,6 +1,7 @@
 using Data.ScriptableObjects;
 using Modules.Drop.View;
 using UnityEngine;
+using Core.Pool;
 
 namespace Modules.Drop.Factory
 {
