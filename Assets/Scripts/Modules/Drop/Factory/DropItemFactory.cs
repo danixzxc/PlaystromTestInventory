@@ -1,7 +1,8 @@
+using Core.Pool;
 using Data.ScriptableObjects;
 using Modules.Drop.View;
 using UnityEngine;
-using Core.Pool;
+using Zenject;
 
 namespace Modules.Drop.Factory
 {
@@ -12,9 +13,9 @@ namespace Modules.Drop.Factory
         private readonly ObjectPool _healthPotionPool;
 
         public DropItemFactory(
-            ObjectPool coinPool,
-            ObjectPool crystalPool,
-            ObjectPool healthPotionPool)
+        [Inject(Id = "CoinPool")] ObjectPool coinPool,
+        [Inject(Id = "CrystalPool")] ObjectPool crystalPool,
+        [Inject(Id = "HealthPool")] ObjectPool healthPotionPool)
         {
             _coinPool = coinPool;
             _crystalPool = crystalPool;
