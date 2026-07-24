@@ -17,6 +17,8 @@ namespace Modules.Inventory.Model
             Crystals = config.InitialCrystals;
             MaxHealth = config.MaxHealth;
             CurrentHealth = config.InitialHealth;
+
+            FireUpdatedEvent();
         }
 
         public void AddCoins(int amount)
