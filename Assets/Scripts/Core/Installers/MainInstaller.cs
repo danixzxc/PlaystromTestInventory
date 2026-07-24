@@ -103,15 +103,18 @@ namespace Core.Installers
 
             Container.Bind<RectTransform>()
                 .WithId("CoinTarget")
-                .FromInstance(_coinIndicatorView.RectTransform);
+                .FromInstance(_coinIndicatorView.GetComponent<RectTransform>())
+                .AsCached();
 
             Container.Bind<RectTransform>()
                 .WithId("CrystalTarget")
-                .FromInstance(_crystalIndicatorView.RectTransform);
+                .FromInstance(_crystalIndicatorView.GetComponent<RectTransform>())
+                .AsCached();
 
             Container.Bind<RectTransform>()
                 .WithId("HealthTarget")
-                .FromInstance(_healthBarView.RectTransform);
+                .FromInstance(_healthBarView.GetComponent<RectTransform>())
+                .AsCached();
 
             Container.Bind<CollectionService>().AsSingle();
             Container.Bind<BonusService>().AsSingle();
