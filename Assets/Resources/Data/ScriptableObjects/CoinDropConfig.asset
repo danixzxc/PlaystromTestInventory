@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: CoinDropConfig
   m_EditorClassIdentifier: 
   ItemType: 0
-  Icon: {fileID: 0}
+  Icon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   Value: 1
   Prefab: {fileID: 2113250073662279890, guid: 1b76296a9c9d89e45abbd711a47cc213, type: 3}
