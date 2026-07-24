@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,7 +6,7 @@ namespace Modules.Inventory.View
 {
     public class CoinIndicatorView : MonoBehaviour
     {
-        [SerializeField] private Text _amountText;
+        [SerializeField] private TextMeshProUGUI _amountText;
         public RectTransform RectTransform { get; private set; }
 
         private void Awake()
