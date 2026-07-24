@@ -1,10 +1,11 @@
 // Assets/_Project/Scripts/Services/CollectionService.cs
+using Core.Pool;
 using Data.ScriptableObjects;
+using Modules.Drop.Commands;
 using Modules.Drop.View;
 using Modules.Inventory.Model;
 using UnityEngine;
-using Modules.Drop.Commands;
-using Core.Pool;
+using Zenject;
 
 namespace Services
 {
@@ -21,9 +22,10 @@ namespace Services
             AnimationService animationService,
             InventoryModel inventoryModel,
             BonusService bonusService,
-            RectTransform coinTarget,
-            RectTransform crystalTarget,
-            RectTransform healthTarget)
+        [Inject(Id = "CoinTarget")] RectTransform coinTarget,
+        [Inject(Id = "CrystalTarget")] RectTransform crystalTarget,
+        [Inject(Id = "HealthTarget")] RectTransform healthTarget
+            )
         {
             _animationService = animationService;
             _inventoryModel = inventoryModel;
