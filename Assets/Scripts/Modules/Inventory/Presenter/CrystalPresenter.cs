@@ -11,9 +11,14 @@ namespace Modules.Inventory.Presenter
         public CrystalPresenter(CrystalIndicatorView view)
         {
             _view = view;
+            EventBus.Subscribe<InventoryInitializedEvent>(OnInventoryInitialized);
             EventBus.Subscribe<InventoryUpdatedEvent>(OnInventoryUpdated);
         }
 
+        private void OnInventoryInitialized(InventoryInitializedEvent eventData)
+        {
+            _view.Initialize(eventData.Crystals);
+        }
         private void OnInventoryUpdated(InventoryUpdatedEvent eventData)
         {
             _view.UpdateAmount(eventData.Crystals);
@@ -21,6 +26,7 @@ namespace Modules.Inventory.Presenter
 
         public void Dispose()
         {
+            EventBus.Unsubscribe<InventoryInitializedEvent>(OnInventoryInitialized);
             EventBus.Unsubscribe<InventoryUpdatedEvent>(OnInventoryUpdated);
         }
     }

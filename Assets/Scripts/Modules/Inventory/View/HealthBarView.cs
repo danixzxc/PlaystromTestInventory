@@ -12,6 +12,14 @@ namespace Modules.Inventory.View
         [SerializeField] private float _tweenDuration = 0.4f;
 
         private Tweener _currentTweener;
+
+        public void InitializeHealth(float current, float max)
+        {
+            float targetValue = current / max;
+
+            _instantHealthSlider.value = targetValue;
+            _delayedHealthSlider.value = targetValue;
+        }
         public void UpdateHealth(float current, float max)
         {
             float targetValue = current / max;

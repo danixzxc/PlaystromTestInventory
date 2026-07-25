@@ -18,7 +18,7 @@ namespace Modules.Inventory.Model
             MaxHealth = config.MaxHealth;
             CurrentHealth = config.InitialHealth;
 
-            FireUpdatedEvent();
+            FireInitializedEvent();
         }
 
         public void AddCoins(int amount)
@@ -45,7 +45,16 @@ namespace Modules.Inventory.Model
             EventBus.Fire(new HealthRestoredEvent(amount));
             FireUpdatedEvent();
         }
-
+        private void FireInitializedEvent()
+        {
+            EventBus.Fire(new InventoryInitializedEvent
+            {
+                Coins = Coins,
+                Crystals = Crystals,
+                CurrentHealth = CurrentHealth,
+                MaxHealth = MaxHealth
+            });
+        }
         private void FireUpdatedEvent()
         {
             EventBus.Fire(new InventoryUpdatedEvent
