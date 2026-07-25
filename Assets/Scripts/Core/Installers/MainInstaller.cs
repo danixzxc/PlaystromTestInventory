@@ -9,6 +9,7 @@ using Modules.Inventory.Presenter;
 using Modules.Chest.Model;
 using Modules.Chest.View;
 using Modules.Chest.Presenter;
+using Modules.Chest.Services;
 using Modules.Drop.View;
 using Modules.Drop.Factory;
 using Modules.Bonus.Model;
@@ -46,9 +47,11 @@ namespace Core.Installers
             BindConfigs();
             BindModels();
             BindViews();
+            BindTargets();
             BindPools();
-            BindFactories();
             BindServices();
+            BindChestServices();
+            BindFactories();
             BindPresenters();
         }
 
@@ -74,6 +77,24 @@ namespace Core.Installers
             Container.Bind<ChestView>().FromInstance(_chestView).AsSingle();
         }
 
+        private void BindTargets()
+        {
+            Container.Bind<RectTransform>()
+                .WithId("CoinTarget")
+                .FromInstance(_coinIndicatorView.GetComponent<RectTransform>())
+                .AsCached();
+
+            Container.Bind<RectTransform>()
+                .WithId("CrystalTarget")
+                .FromInstance(_crystalIndicatorView.GetComponent<RectTransform>())
+                .AsCached();
+
+            Container.Bind<RectTransform>()
+                .WithId("HealthTarget")
+                .FromInstance(_healthBarView.GetComponent<RectTransform>())
+                .AsCached();
+        }
+
         private void BindPools()
         {
             Container.Bind<ObjectPool>()
@@ -92,32 +113,22 @@ namespace Core.Installers
                 .AsCached();
         }
 
-        private void BindFactories()
-        {
-            Container.Bind<DropItemFactory>().AsSingle();
-        }
-
         private void BindServices()
         {
             Container.Bind<AnimationService>().AsSingle();
-
-            Container.Bind<RectTransform>()
-                .WithId("CoinTarget")
-                .FromInstance(_coinIndicatorView.GetComponent<RectTransform>())
-                .AsCached();
-
-            Container.Bind<RectTransform>()
-                .WithId("CrystalTarget")
-                .FromInstance(_crystalIndicatorView.GetComponent<RectTransform>())
-                .AsCached();
-
-            Container.Bind<RectTransform>()
-                .WithId("HealthTarget")
-                .FromInstance(_healthBarView.GetComponent<RectTransform>())
-                .AsCached();
-
             Container.Bind<CollectionService>().AsSingle();
             Container.Bind<BonusService>().AsSingle();
+        }
+
+        private void BindChestServices()
+        {
+            Container.Bind<ChestStateService>().AsSingle();
+            Container.Bind<ChestCycleService>().AsSingle();
+        }
+
+        private void BindFactories()
+        {
+            Container.Bind<DropItemFactory>().AsSingle();
         }
 
         private void BindPresenters()

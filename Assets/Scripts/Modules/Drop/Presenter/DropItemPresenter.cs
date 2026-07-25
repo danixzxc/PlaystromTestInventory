@@ -1,9 +1,7 @@
+using System;
 using Data.ScriptableObjects;
 using Modules.Drop.View;
-using Modules.Inventory.Events;
-using Core.EventBus;
 using Services;
-using Modules.Drop.Commands;
 
 namespace Modules.Drop.Presenter
 {
@@ -12,6 +10,8 @@ namespace Modules.Drop.Presenter
         private readonly BaseDropItemView _view;
         private readonly DropItemConfig _config;
         private readonly CollectionService _collectionService;
+
+        public event Action OnCollected;
 
         public DropItemPresenter(
             BaseDropItemView view,
@@ -27,7 +27,7 @@ namespace Modules.Drop.Presenter
         private void OnItemClicked()
         {
             _view.OnItemClicked.RemoveListener(OnItemClicked);
-            _collectionService.CollectItem(_view, _config);
+            _collectionService.CollectItem(_view, _config, () => OnCollected?.Invoke());
         }
 
         public void Dispose()

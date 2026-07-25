@@ -1,11 +1,11 @@
 using Core.Pool;
 using Data.ScriptableObjects;
 using Modules.Drop.View;
-using UnityEngine;
-using Zenject;
 using Modules.Drop.Presenter;
 using Services;
-using System.Collections.Generic;
+using UnityEngine;
+using Zenject;
+using System;
 
 namespace Modules.Drop.Factory
 {
@@ -15,7 +15,6 @@ namespace Modules.Drop.Factory
         private readonly ObjectPool _crystalPool;
         private readonly ObjectPool _healthPotionPool;
         private readonly CollectionService _collectionService;
-        private readonly List<DropItemPresenter> _activePresenters = new List<DropItemPresenter>();
 
         public DropItemFactory(
             [Inject(Id = "CoinPool")] ObjectPool coinPool,
@@ -29,14 +28,17 @@ namespace Modules.Drop.Factory
             _collectionService = collectionService;
         }
 
-        public BaseDropItemView CreateDrop(DropItemConfig config, Vector3 position)
+        public BaseDropItemView CreateDrop(DropItemConfig config, Vector3 position, Action onCollected = null)
         {
             BaseDropItemView dropView = GetDropFromPool(config.ItemType);
             dropView.transform.position = position;
             dropView.SetSprite(config.Icon);
 
             DropItemPresenter presenter = new DropItemPresenter(dropView, config, _collectionService);
-            _activePresenters.Add(presenter);
+            if (onCollected != null)
+            {
+                presenter.OnCollected += onCollected;
+            }
 
             return dropView;
         }

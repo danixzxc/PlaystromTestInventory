@@ -1,12 +1,14 @@
 using Core.Pool;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 namespace Modules.Drop.View
 {
-    public class BaseDropItemView : PooledItem
+    public class BaseDropItemView : PooledItem, IPointerClickHandler
     {
         [SerializeField] protected SpriteRenderer _spriteRenderer;
+        [SerializeField] protected Vector3 _defaultScale = new Vector3(5,5,1);
 
         public UnityEvent OnItemClicked = new UnityEvent();
         public RectTransform RectTransform { get; private set; }
@@ -16,7 +18,7 @@ namespace Modules.Drop.View
             RectTransform = GetComponent<RectTransform>();
         }
 
-        private void OnMouseDown()
+        public void OnPointerClick(PointerEventData eventData)
         {
             OnItemClicked.Invoke();
         }
@@ -29,6 +31,7 @@ namespace Modules.Drop.View
         public override void OnSpawn()
         {
             gameObject.SetActive(true);
+            gameObject.transform.localScale = _defaultScale;
         }
 
         public override void OnDespawn()

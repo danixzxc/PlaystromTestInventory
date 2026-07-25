@@ -1,12 +1,11 @@
-using Core.Pool;
+using System;
 using Data.ScriptableObjects;
-using Modules.Bonus.Model;
-using Modules.Drop.Commands;
 using Modules.Drop.View;
 using Modules.Inventory.Model;
+using Modules.Bonus.Model;
 using UnityEngine;
+using Modules.Drop.Commands;
 using Zenject;
-
 
 namespace Services
 {
@@ -38,7 +37,7 @@ namespace Services
             _healthTarget = healthTarget;
         }
 
-        public void CollectItem(BaseDropItemView dropView, DropItemConfig config)
+        public void CollectItem(BaseDropItemView dropView, DropItemConfig config, Action onComplete = null)
         {
             RectTransform target = GetTargetForType(config.ItemType);
             _bonusService.RegisterCollection(config.ItemType);
@@ -47,6 +46,7 @@ namespace Services
             {
                 ApplyCollection(config);
                 dropView.ReturnToPool();
+                onComplete?.Invoke();
             });
         }
 
