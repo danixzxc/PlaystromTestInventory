@@ -13,7 +13,10 @@ namespace Services
         public void FlyToTarget(Transform item, RectTransform uiTarget, Action onComplete)
         {
             Vector3 startPosition = item.position;
-            Vector3 targetWorldPosition = uiTarget.position;
+
+            Vector3 screenPos = uiTarget.position;
+            Vector3 targetWorldPosition = Camera.main.ScreenToWorldPoint(screenPos);
+
             Vector3 midPoint = (startPosition + targetWorldPosition) / 2f;
             midPoint.y += _arcHeight;
 

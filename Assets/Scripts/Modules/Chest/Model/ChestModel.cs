@@ -17,9 +17,10 @@ namespace Modules.Chest.Model
             List<DropItemConfig> drops = new List<DropItemConfig>();
             int dropCount = UnityEngine.Random.Range(_chestConfig.MinDrops, _chestConfig.MaxDrops + 1);
 
+            DropItemConfig selectedDrop = _chestConfig.GetRandomDrop();
             for (int i = 0; i < dropCount; i++)
             {
-                drops.Add(_chestConfig.GetRandomDrop());
+                drops.Add(selectedDrop);
             }
 
             return drops;
