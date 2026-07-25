@@ -15,4 +15,4 @@ MonoBehaviour:
   RequiredItemsForBonus: 3
   TimeWindowSeconds: 2
   BonusDurationSeconds: 5
-  BonusMultiplier: 1.5
+  BonusMultiplier: 2

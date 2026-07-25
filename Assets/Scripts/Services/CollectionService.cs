@@ -1,11 +1,12 @@
-// Assets/_Project/Scripts/Services/CollectionService.cs
 using Core.Pool;
 using Data.ScriptableObjects;
+using Modules.Bonus.Model;
 using Modules.Drop.Commands;
 using Modules.Drop.View;
 using Modules.Inventory.Model;
 using UnityEngine;
 using Zenject;
+
 
 namespace Services
 {
@@ -13,6 +14,7 @@ namespace Services
     {
         private readonly AnimationService _animationService;
         private readonly InventoryModel _inventoryModel;
+        private readonly BonusModel _bonusModel;
         private readonly BonusService _bonusService;
         private readonly RectTransform _coinTarget;
         private readonly RectTransform _crystalTarget;
@@ -21,14 +23,15 @@ namespace Services
         public CollectionService(
             AnimationService animationService,
             InventoryModel inventoryModel,
+            BonusModel bonusModel,
             BonusService bonusService,
-        [Inject(Id = "CoinTarget")] RectTransform coinTarget,
-        [Inject(Id = "CrystalTarget")] RectTransform crystalTarget,
-        [Inject(Id = "HealthTarget")] RectTransform healthTarget
-            )
+            [Inject(Id = "CoinTarget")] RectTransform coinTarget,
+            [Inject(Id = "CrystalTarget")] RectTransform crystalTarget,
+            [Inject(Id = "HealthTarget")] RectTransform healthTarget)
         {
             _animationService = animationService;
             _inventoryModel = inventoryModel;
+            _bonusModel = bonusModel;
             _bonusService = bonusService;
             _coinTarget = coinTarget;
             _crystalTarget = crystalTarget;
@@ -64,7 +67,7 @@ namespace Services
 
         private void ApplyCollection(DropItemConfig config)
         {
-            CollectItemCommand command = new CollectItemCommand(_inventoryModel);
+            CollectItemCommand command = new CollectItemCommand(_inventoryModel, _bonusModel);
             command.Execute(config);
         }
     }
