@@ -14,31 +14,40 @@ namespace Modules.Drop.Factory
         private readonly ObjectPool _coinPool;
         private readonly ObjectPool _crystalPool;
         private readonly ObjectPool _healthPotionPool;
-        private readonly CollectionService _collectionService;
+        private readonly ItemMovementService _itemMovementService;
 
         public DropItemFactory(
             [Inject(Id = "CoinPool")] ObjectPool coinPool,
             [Inject(Id = "CrystalPool")] ObjectPool crystalPool,
             [Inject(Id = "HealthPool")] ObjectPool healthPotionPool,
-            CollectionService collectionService)
+            ItemMovementService itemMovementService)
         {
             _coinPool = coinPool;
             _crystalPool = crystalPool;
             _healthPotionPool = healthPotionPool;
-            _collectionService = collectionService;
+            _itemMovementService = itemMovementService;
         }
 
-        public BaseDropItemView CreateDrop(DropItemConfig config, Vector3 position, Action onCollected = null)
+        public BaseDropItemView CreateDrop(DropItemConfig config, Vector3 spawnPosition, Action onCollected = null)
         {
             BaseDropItemView dropView = GetDropFromPool(config.ItemType);
-            dropView.transform.position = position;
+            dropView.transform.position = spawnPosition;
             dropView.SetSprite(config.Icon);
 
-            DropItemPresenter presenter = new DropItemPresenter(dropView, config, _collectionService);
-            if (onCollected != null)
+            Vector3 groundPosition = spawnPosition + new Vector3(
+                UnityEngine.Random.Range(-3f, 3f),
+                -2f,
+                0f
+            );
+
+            _itemMovementService.DropToGround(dropView, groundPosition, () =>
             {
-                presenter.OnCollected += onCollected;
-            }
+                DropItemPresenter presenter = new DropItemPresenter(dropView, config, _itemMovementService);
+                if (onCollected != null)
+                {
+                    presenter.OnCollected += onCollected;
+                }
+            });
 
             return dropView;
         }

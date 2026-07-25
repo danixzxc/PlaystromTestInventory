@@ -14,6 +14,7 @@ namespace Modules.Chest.View
 
         public UnityEvent OnChestClicked = new UnityEvent();
         public UnityEvent OnSpawnComplete = new UnityEvent();
+        public UnityEvent OnChestOpenAnimationPeak = new UnityEvent();
 
         private Tween _currentTween;
         private bool _interactable;
@@ -72,6 +73,11 @@ namespace Modules.Chest.View
             {
                 OnChestClicked.Invoke();
             }
+        }
+
+        public void OnChestOpenedAnimationEvent()
+        {
+            OnChestOpenAnimationPeak.Invoke();
         }
 
         private void OnDestroy()

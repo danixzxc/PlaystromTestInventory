@@ -116,7 +116,7 @@ namespace Core.Installers
         private void BindServices()
         {
             Container.Bind<AnimationService>().AsSingle();
-            Container.Bind<CollectionService>().AsSingle();
+            Container.Bind<ItemMovementService>().AsSingle();
             Container.Bind<BonusService>().AsSingle();
         }
 

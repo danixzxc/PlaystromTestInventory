@@ -9,7 +9,7 @@ using Zenject;
 
 namespace Services
 {
-    public class CollectionService
+    public class ItemMovementService
     {
         private readonly AnimationService _animationService;
         private readonly InventoryModel _inventoryModel;
@@ -19,7 +19,7 @@ namespace Services
         private readonly RectTransform _crystalTarget;
         private readonly RectTransform _healthTarget;
 
-        public CollectionService(
+        public ItemMovementService(
             AnimationService animationService,
             InventoryModel inventoryModel,
             BonusModel bonusModel,
@@ -42,14 +42,20 @@ namespace Services
             RectTransform target = GetTargetForType(config.ItemType);
             _bonusService.RegisterCollection(config.ItemType);
 
-            _animationService.FlyToTarget(dropView.transform, target, () =>
+            _animationService.FlyToTarget(dropView.transform, Camera.main.ScreenToWorldPoint(target.position), () =>
             {
                 ApplyCollection(config);
                 dropView.ReturnToPool();
                 onComplete?.Invoke();
             });
         }
-
+        public void DropToGround(BaseDropItemView dropView, Vector3 groundPosition, Action onComplete = null)
+        {
+            _animationService.FlyToTarget(dropView.transform, groundPosition, () =>
+            {
+                onComplete?.Invoke();
+            }, false);
+        }
         private RectTransform GetTargetForType(DropItemType type)
         {
             switch (type)

@@ -24,6 +24,7 @@ namespace Modules.Chest.Services
             _dropItemFactory = dropItemFactory;
 
             _view.OnChestClicked.AddListener(OnChestClicked);
+            _view.OnChestOpenAnimationPeak.AddListener(OnOpenAnimationPeak);
             _view.OnSpawnComplete.AddListener(OnSpawnComplete);
         }
 
@@ -54,7 +55,11 @@ namespace Modules.Chest.Services
 
             _model.SetState(ChestState.Opened);
             _view.PlayOpenAnimation();
+            EventBus.Fire(new ChestOpenedEvent());
+        }
 
+        private void OnOpenAnimationPeak()
+        {
             List<DropItemConfig> drops = _model.GetRandomDrops();
             _model.SetDropsCount(drops.Count);
 
@@ -62,18 +67,11 @@ namespace Modules.Chest.Services
 
             foreach (var dropConfig in drops)
             {
-                Vector3 spawnPosition = chestPosition + new Vector3(
-                    UnityEngine.Random.Range(-1f, 1f),
-                    UnityEngine.Random.Range(0.5f, 1.5f),
-                    0f
-                );
-
+                Vector3 spawnPosition = chestPosition + Vector3.up;
                 BaseDropItemView dropView = null;
-                dropView = _dropItemFactory.CreateDrop(dropConfig, spawnPosition, () => RegisterDropCollected(dropView)); 
+                dropView = _dropItemFactory.CreateDrop(dropConfig, spawnPosition, () => RegisterDropCollected(dropView));
                 _activeDrops.Add(dropView);
             }
-
-            EventBus.Fire(new ChestOpenedEvent());
         }
 
         private void RegisterDropCollected(BaseDropItemView dropView)
@@ -99,6 +97,7 @@ namespace Modules.Chest.Services
         public void Dispose()
         {
             _view.OnChestClicked.RemoveListener(OnChestClicked);
+            _view.OnChestOpenAnimationPeak.RemoveListener(OnOpenAnimationPeak);
             _view.OnSpawnComplete.RemoveListener(OnSpawnComplete);
         }
     }

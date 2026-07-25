@@ -10,21 +10,18 @@ namespace Services
         private readonly float _arcHeight = 2f;
         private readonly Ease _ease = Ease.OutCubic;
 
-        public void FlyToTarget(Transform item, RectTransform uiTarget, Action onComplete)
+        public void FlyToTarget(Transform item, Vector3 uiTarget, Action onComplete, bool disappearOnComplete = true)
         {
             Vector3 startPosition = item.position;
 
-            Vector3 screenPos = uiTarget.position;
-            Vector3 targetWorldPosition = Camera.main.ScreenToWorldPoint(screenPos);
-
-            Vector3 midPoint = (startPosition + targetWorldPosition) / 2f;
+            Vector3 midPoint = (startPosition + uiTarget) / 2f;
             midPoint.y += _arcHeight;
 
             Vector3[] path = new Vector3[]
             {
                 startPosition,
                 midPoint,
-                targetWorldPosition
+                uiTarget
             };
 
             item.DOPath(path, _duration, PathType.CatmullRom)
@@ -34,7 +31,10 @@ namespace Services
                     onComplete?.Invoke();
                 });
 
-            item.DOScale(Vector3.zero, _duration * 0.3f).SetDelay(_duration * 0.7f);
+            if (disappearOnComplete)
+            {
+                item.DOScale(Vector3.zero, _duration * 0.3f).SetDelay(_duration * 0.7f);
+            }
         }
     }
 }
