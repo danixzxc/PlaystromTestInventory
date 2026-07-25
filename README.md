@@ -47,3 +47,12 @@ All bindings configured in `MainInstaller`. Models, services, pools, and factori
 | **ScriptableObject** | Config data for chest drop tables, inventory defaults, bonus thresholds |
 | **Unity Events** | View-to-Presenter communication within MVP pattern |
 
+
+## Key Design Decisions
+
+- **No static state** - sorting order counter lives in factory instance, not static field
+- **View stays dumb** - animation markers use UnityEvents, not direct EventBus calls
+- **Services over fat presenters** - `ChestStateService` manages chest lifecycle, `ItemMovementService` handles item physics
+- **Struct events** - reduce GC allocations compared to class-based events
+- **Pool restores state** - `OnSpawn` resets scale, so animation scale-to-zero doesn't persist
+
