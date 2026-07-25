@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
+using UnityEngine;
 
 namespace Services
 {
@@ -13,6 +14,7 @@ namespace Services
         private readonly BonusConfig _bonusConfig;
         private readonly Queue<CollectionRecord> _recentCollections = new Queue<CollectionRecord>();
         private CancellationTokenSource _bonusCts;
+        private bool _isBonusActive;
 
         public BonusService(BonusConfig bonusConfig)
         {
@@ -21,10 +23,12 @@ namespace Services
 
         public void RegisterCollection(DropItemType type)
         {
+            if (_isBonusActive) return;
+
             _recentCollections.Enqueue(new CollectionRecord
             {
                 Type = type,
-                Time = UnityEngine.Time.time
+                Time = Time.time
             });
 
             while (_recentCollections.Count > _bonusConfig.RequiredItemsForBonus)
@@ -33,6 +37,13 @@ namespace Services
             }
 
             CheckForBonus();
+        }
+
+        public void DeactivateBonus()
+        {
+            _bonusCts?.Cancel();
+            _isBonusActive = false;
+            EventBus.Fire(new BonusDeactivatedEvent());
         }
 
         private void CheckForBonus()
@@ -62,34 +73,39 @@ namespace Services
 
                 if (allSameType)
                 {
-                    ActivateBonus();
+                    ActivateBonus(records[i].Type);
                     _recentCollections.Clear();
                     return;
                 }
             }
         }
 
-        private async void ActivateBonus()
+        private async void ActivateBonus(DropItemType type)
         {
+            _isBonusActive = true;
             _bonusCts?.Cancel();
             _bonusCts = new CancellationTokenSource();
 
-            EventBus.Fire(new QuickCollectBonusEvent(_bonusConfig.BonusMultiplier));
+            EventBus.Fire(new QuickCollectBonusEvent(_bonusConfig.BonusMultiplier, _bonusConfig.BonusDurationSeconds, type));
 
-            try
+            float elapsedTime = 0f;
+            while (elapsedTime < _bonusConfig.BonusDurationSeconds)
             {
-                await UniTask.Delay(
-                    TimeSpan.FromSeconds(_bonusConfig.BonusDurationSeconds),
-                    cancellationToken: _bonusCts.Token
-                );
-                DeactivateBonus();
-            }
-            catch (OperationCanceledException) { }
-        }
+                float deltaTime = Time.deltaTime;
+                elapsedTime += deltaTime;
+                EventBus.Fire(new BonusTimerTickEvent(deltaTime));
 
-        private void DeactivateBonus()
-        {
-            EventBus.Fire(new QuickCollectBonusEvent(1f));
+                try
+                {
+                    await UniTask.Delay(TimeSpan.FromSeconds(Time.deltaTime), cancellationToken: _bonusCts.Token);
+                }
+                catch (OperationCanceledException)
+                {
+                    return;
+                }
+            }
+
+            DeactivateBonus();
         }
 
         private struct CollectionRecord

@@ -40,7 +40,15 @@ namespace Services
         public void CollectItem(BaseDropItemView dropView, DropItemConfig config, Action onComplete = null)
         {
             RectTransform target = GetTargetForType(config.ItemType);
-            _bonusService.RegisterCollection(config.ItemType);
+
+            if (_bonusModel.IsBonusActive && config.ItemType != _bonusModel.BonusType)
+            {
+                _bonusService.DeactivateBonus();
+            }
+            else
+            {
+                _bonusService.RegisterCollection(config.ItemType);
+            }
 
             _animationService.FlyToTarget(dropView.transform, Camera.main.ScreenToWorldPoint(target.position), () =>
             {
@@ -49,6 +57,7 @@ namespace Services
                 onComplete?.Invoke();
             });
         }
+
         public void DropToGround(BaseDropItemView dropView, Vector3 groundPosition, Action onComplete = null)
         {
             _animationService.FlyToTarget(dropView.transform, groundPosition, () =>
@@ -56,6 +65,7 @@ namespace Services
                 onComplete?.Invoke();
             }, false);
         }
+
         private RectTransform GetTargetForType(DropItemType type)
         {
             switch (type)

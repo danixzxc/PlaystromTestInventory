@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RequiredItemsForBonus: 3
   TimeWindowSeconds: 2
-  BonusDurationSeconds: 5
+  BonusDurationSeconds: 10
   BonusMultiplier: 2

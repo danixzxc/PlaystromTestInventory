@@ -1,20 +1,21 @@
-using Zenject;
-using UnityEngine;
 using Core.EventBus;
 using Core.Pool;
 using Data.ScriptableObjects;
-using Modules.Inventory.Model;
-using Modules.Inventory.View;
-using Modules.Inventory.Presenter;
-using Modules.Chest.Model;
-using Modules.Chest.View;
-using Modules.Chest.Presenter;
-using Modules.Chest.Services;
-using Modules.Drop.View;
-using Modules.Drop.Factory;
 using Modules.Bonus.Model;
 using Modules.Bonus.Presenter;
+using Modules.Bonus.View;
+using Modules.Chest.Model;
+using Modules.Chest.Presenter;
+using Modules.Chest.Services;
+using Modules.Chest.View;
+using Modules.Drop.Factory;
+using Modules.Drop.View;
+using Modules.Inventory.Model;
+using Modules.Inventory.Presenter;
+using Modules.Inventory.View;
 using Services;
+using UnityEngine;
+using Zenject;
 
 namespace Core.Installers
 {
@@ -32,6 +33,9 @@ namespace Core.Installers
 
         [Header("Chest")]
         [SerializeField] private ChestView _chestView;
+
+        [Header("Bonus")]
+        [SerializeField] private BonusView _bonusView;
 
         [Header("Drop Prefabs")]
         [SerializeField] private BaseDropItemView _coinDropPrefab;
@@ -75,6 +79,7 @@ namespace Core.Installers
             Container.Bind<CrystalIndicatorView>().FromInstance(_crystalIndicatorView).AsSingle();
             Container.Bind<HealthBarView>().FromInstance(_healthBarView).AsSingle();
             Container.Bind<ChestView>().FromInstance(_chestView).AsSingle();
+            Container.Bind<BonusView>().FromInstance(_bonusView).AsSingle();
         }
 
         private void BindTargets()
@@ -130,8 +135,8 @@ namespace Core.Installers
         {
             Container.Bind<DropItemFactory>().AsSingle();
         }
-
-        private void BindPresenters()
+        
+private void BindPresenters()
         {
             Container.Bind<CoinPresenter>().AsSingle().NonLazy();
             Container.Bind<CrystalPresenter>().AsSingle().NonLazy();
