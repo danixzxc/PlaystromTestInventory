@@ -15,6 +15,7 @@ namespace Modules.Drop.Factory
         private readonly ObjectPool _crystalPool;
         private readonly ObjectPool _healthPotionPool;
         private readonly ItemMovementService _itemMovementService;
+        private int _sortingOrderCounter;
 
         public DropItemFactory(
             [Inject(Id = "CoinPool")] ObjectPool coinPool,
@@ -33,6 +34,7 @@ namespace Modules.Drop.Factory
             BaseDropItemView dropView = GetDropFromPool(config.ItemType);
             dropView.transform.position = spawnPosition;
             dropView.SetSprite(config.Icon);
+            dropView.SetSortingOrder(++_sortingOrderCounter);
 
             Vector3 groundPosition = spawnPosition + new Vector3(
                 UnityEngine.Random.Range(-3f, 3f),

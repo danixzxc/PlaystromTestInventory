@@ -27,7 +27,10 @@ namespace Modules.Drop.View
         {
             _spriteRenderer.sprite = sprite;
         }
-
+        public void SetSortingOrder(int order)
+        {
+            _spriteRenderer.sortingOrder = order;
+        }
         public override void OnSpawn()
         {
             gameObject.SetActive(true);
