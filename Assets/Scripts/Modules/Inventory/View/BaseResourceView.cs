@@ -14,13 +14,7 @@ namespace Modules.Inventory.View
         [SerializeField] protected float _scaleInDurationMultiplier = 0.5f;
         [SerializeField] protected float _scaleOutDurationMultiplier = 0.5f;
 
-        public RectTransform RectTransform { get; private set; }
         protected Tweener _currentTweener;
-
-        protected virtual void Awake()
-        {
-            RectTransform = GetComponent<RectTransform>();
-        }
 
         public virtual void Initialize(int amount)
         {
