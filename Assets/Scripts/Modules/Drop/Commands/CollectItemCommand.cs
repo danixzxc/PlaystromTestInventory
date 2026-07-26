@@ -1,8 +1,7 @@
-using Core.EventBus;
+using System;
+using System.Collections.Generic;
 using Data.ScriptableObjects;
 using Modules.Bonus.Model;
-using Modules.Drop.View;
-using Modules.Inventory.Events;
 using Modules.Inventory.Model;
 using UnityEngine;
 
@@ -12,29 +11,25 @@ namespace Modules.Drop.Commands
     {
         private readonly InventoryModel _inventoryModel;
         private readonly BonusModel _bonusModel;
+        private readonly Dictionary<DropItemType, Action<int>> _collectActions;
 
         public CollectItemCommand(InventoryModel inventoryModel, BonusModel bonusModel)
         {
             _inventoryModel = inventoryModel;
             _bonusModel = bonusModel;
+
+            _collectActions = new Dictionary<DropItemType, Action<int>>
+            {
+                { DropItemType.Coin, value => _inventoryModel.AddCoins(value) },
+                { DropItemType.Crystal, value => _inventoryModel.AddCrystals(value) },
+                { DropItemType.HealthPotion, value => _inventoryModel.RestoreHealth(value) }
+            };
         }
 
         public void Execute(DropItemConfig config)
         {
             int multipliedValue = Mathf.RoundToInt(config.Value * _bonusModel.CurrentMultiplier);
-
-            switch (config.ItemType)
-            {
-                case DropItemType.Coin:
-                    _inventoryModel.AddCoins(multipliedValue);
-                    break;
-                case DropItemType.Crystal:
-                    _inventoryModel.AddCrystals(multipliedValue);
-                    break;
-                case DropItemType.HealthPotion:
-                    _inventoryModel.RestoreHealth(multipliedValue);
-                    break;
-            }
+            _collectActions[config.ItemType]?.Invoke(multipliedValue);
         }
     }
 }

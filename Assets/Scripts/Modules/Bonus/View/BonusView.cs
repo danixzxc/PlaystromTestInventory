@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Data.ScriptableObjects;
 using DG.Tweening;
 using UnityEngine;
@@ -10,15 +11,14 @@ namespace Modules.Bonus.View
         [SerializeField] private GameObject _bonusIndicator;
         [SerializeField] private Slider _bonusTimerSlider;
         [SerializeField] private Image _sliderFillImage;
-        [SerializeField] private Color _coinColor = Color.yellow;
-        [SerializeField] private Color _healthColor = Color.green;
-        [SerializeField] private Color _crystalColor = Color.cyan;
         [SerializeField] private float _scaleInDuration = 0.3f;
         [SerializeField] private float _scaleOutDuration = 0.3f;
         [SerializeField] private float _scaleMultiplier = 1.2f;
+        [SerializeField] private BonusTypeColor[] _bonusTypeColors;
 
         public RectTransform RectTransform { get; private set; }
 
+        private Dictionary<DropItemType, Color> _colorMap;
         private Tweener _currentTweener;
 
         private void Awake()
@@ -26,13 +26,19 @@ namespace Modules.Bonus.View
             RectTransform = GetComponent<RectTransform>();
             _bonusIndicator.SetActive(false);
             _bonusIndicator.transform.localScale = Vector3.zero;
+
+            _colorMap = new Dictionary<DropItemType, Color>();
+            foreach (var bonusTypeColor in _bonusTypeColors)
+            {
+                _colorMap[bonusTypeColor.Type] = bonusTypeColor.Color;
+            }
         }
 
         public void ShowBonus(float duration, DropItemType bonusType)
         {
             _bonusIndicator.SetActive(true);
             _bonusTimerSlider.value = 1f;
-            _sliderFillImage.color = GetColorByType(bonusType);
+            _sliderFillImage.color = _colorMap.ContainsKey(bonusType) ? _colorMap[bonusType] : Color.white;
 
             _currentTweener?.Kill();
             _bonusIndicator.transform.localScale = Vector3.zero;
@@ -60,19 +66,11 @@ namespace Modules.Bonus.View
                 });
         }
 
-        private Color GetColorByType(DropItemType type)
+        [System.Serializable]
+        private struct BonusTypeColor
         {
-            switch (type)
-            {
-                case DropItemType.Coin:
-                    return _coinColor;
-                case DropItemType.HealthPotion:
-                    return _healthColor;
-                case DropItemType.Crystal:
-                    return _crystalColor;
-                default:
-                    return Color.white;
-            }
+            public DropItemType Type;
+            public Color Color;
         }
     }
 }

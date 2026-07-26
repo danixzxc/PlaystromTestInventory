@@ -128,12 +128,16 @@ MonoBehaviour:
   _bonusIndicator: {fileID: 2742661386432737757}
   _bonusTimerSlider: {fileID: 2835857830777200228}
   _sliderFillImage: {fileID: 7391459819820817406}
-  _coinColor: {r: 1, g: 0.93725497, b: 0.16470589, a: 1}
-  _healthColor: {r: 0, g: 0.6431373, b: 0.49803925, a: 1}
-  _crystalColor: {r: 0.10980393, g: 0.53333336, b: 0.8980393, a: 1}
   _scaleInDuration: 0.3
   _scaleOutDuration: 0.3
   _scaleMultiplier: 1.2
+  _bonusTypeColors:
+  - Type: 0
+    Color: {r: 0.93725497, g: 0.69803923, b: 0, a: 1}
+  - Type: 1
+    Color: {r: 0.6117647, g: 0.33333334, b: 0.77647066, a: 1}
+  - Type: 2
+    Color: {r: 0, g: 0.67058825, b: 0.5176471, a: 1}
 --- !u!1 &3475525862253521471
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,14 +6,13 @@ using Services;
 using UnityEngine;
 using Zenject;
 using System;
+using System.Collections.Generic;
 
 namespace Modules.Drop.Factory
 {
     public class DropItemFactory
     {
-        private readonly ObjectPool _coinPool;
-        private readonly ObjectPool _crystalPool;
-        private readonly ObjectPool _healthPotionPool;
+        private readonly Dictionary<DropItemType, ObjectPool> _pools;
         private readonly ItemMovementService _itemMovementService;
         private int _sortingOrderCounter;
 
@@ -23,15 +22,19 @@ namespace Modules.Drop.Factory
             [Inject(Id = "HealthPool")] ObjectPool healthPotionPool,
             ItemMovementService itemMovementService)
         {
-            _coinPool = coinPool;
-            _crystalPool = crystalPool;
-            _healthPotionPool = healthPotionPool;
             _itemMovementService = itemMovementService;
+
+            _pools = new Dictionary<DropItemType, ObjectPool>
+            {
+                { DropItemType.Coin, coinPool },
+                { DropItemType.Crystal, crystalPool },
+                { DropItemType.HealthPotion, healthPotionPool }
+            };
         }
 
         public BaseDropItemView CreateDrop(DropItemConfig config, Vector3 spawnPosition, Action onCollected = null)
         {
-            BaseDropItemView dropView = GetDropFromPool(config.ItemType);
+            BaseDropItemView dropView = _pools[config.ItemType].Get<BaseDropItemView>();
             dropView.transform.position = spawnPosition;
             dropView.SetSprite(config.Icon);
             dropView.SetSortingOrder(++_sortingOrderCounter);
@@ -52,21 +55,6 @@ namespace Modules.Drop.Factory
             });
 
             return dropView;
-        }
-
-        private BaseDropItemView GetDropFromPool(DropItemType type)
-        {
-            switch (type)
-            {
-                case DropItemType.Coin:
-                    return _coinPool.Get<BaseDropItemView>();
-                case DropItemType.Crystal:
-                    return _crystalPool.Get<BaseDropItemView>();
-                case DropItemType.HealthPotion:
-                    return _healthPotionPool.Get<BaseDropItemView>();
-                default:
-                    return null;
-            }
         }
     }
 }

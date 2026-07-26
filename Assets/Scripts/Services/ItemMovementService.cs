@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Data.ScriptableObjects;
 using Modules.Drop.View;
 using Modules.Inventory.Model;
@@ -15,9 +16,7 @@ namespace Services
         private readonly InventoryModel _inventoryModel;
         private readonly BonusModel _bonusModel;
         private readonly BonusService _bonusService;
-        private readonly RectTransform _coinTarget;
-        private readonly RectTransform _crystalTarget;
-        private readonly RectTransform _healthTarget;
+        private readonly Dictionary<DropItemType, RectTransform> _targets;
 
         public ItemMovementService(
             AnimationService animationService,
@@ -32,14 +31,18 @@ namespace Services
             _inventoryModel = inventoryModel;
             _bonusModel = bonusModel;
             _bonusService = bonusService;
-            _coinTarget = coinTarget;
-            _crystalTarget = crystalTarget;
-            _healthTarget = healthTarget;
+
+            _targets = new Dictionary<DropItemType, RectTransform>
+            {
+                { DropItemType.Coin, coinTarget },
+                { DropItemType.Crystal, crystalTarget },
+                { DropItemType.HealthPotion, healthTarget }
+            };
         }
 
         public void CollectItem(BaseDropItemView dropView, DropItemConfig config, Action onComplete = null)
         {
-            RectTransform target = GetTargetForType(config.ItemType);
+            RectTransform target = _targets[config.ItemType];
 
             if (_bonusModel.IsBonusActive && config.ItemType != _bonusModel.BonusType)
             {
@@ -64,21 +67,6 @@ namespace Services
             {
                 onComplete?.Invoke();
             }, false);
-        }
-
-        private RectTransform GetTargetForType(DropItemType type)
-        {
-            switch (type)
-            {
-                case DropItemType.Coin:
-                    return _coinTarget;
-                case DropItemType.Crystal:
-                    return _crystalTarget;
-                case DropItemType.HealthPotion:
-                    return _healthTarget;
-                default:
-                    return _coinTarget;
-            }
         }
 
         private void ApplyCollection(DropItemConfig config)
