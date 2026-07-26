@@ -107,11 +107,5 @@ namespace Services
 
             DeactivateBonus();
         }
-
-        private struct CollectionRecord
-        {
-            public DropItemType Type;
-            public float Time;
-        }
     }
 }

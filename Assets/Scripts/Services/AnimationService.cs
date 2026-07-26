@@ -4,6 +4,7 @@ using System;
 
 namespace Services
 {
+    // for non UI animations
     public class AnimationService
     {
         private readonly float _duration = 0.5f;

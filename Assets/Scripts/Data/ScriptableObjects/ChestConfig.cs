@@ -17,28 +17,5 @@ namespace Data.ScriptableObjects
         public DropChance[] DropTable;
         public int MinDrops = 1;
         public int MaxDrops = 3;
-
-        public DropItemConfig GetRandomDrop()
-        {
-            float totalWeight = 0f;
-            foreach (var drop in DropTable)
-            {
-                totalWeight += drop.Weight;
-            }
-
-            float randomValue = UnityEngine.Random.Range(0f, totalWeight);
-            float cumulativeWeight = 0f;
-
-            foreach (var drop in DropTable)
-            {
-                cumulativeWeight += drop.Weight;
-                if (randomValue <= cumulativeWeight)
-                {
-                    return drop.ItemConfig;
-                }
-            }
-
-            return DropTable.Length > 0 ? DropTable[0].ItemConfig : null;
-        }
     }
 }

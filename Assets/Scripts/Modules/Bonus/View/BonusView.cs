@@ -66,11 +66,5 @@ namespace Modules.Bonus.View
                 });
         }
 
-        [System.Serializable]
-        private struct BonusTypeColor
-        {
-            public DropItemType Type;
-            public Color Color;
-        }
     }
 }

@@ -22,7 +22,6 @@ namespace Modules.Chest.Model
         public int TotalDropsSpawned { get; private set; }
         public int DropsCollected { get; private set; }
 
-
         public ChestModel(ChestConfig chestConfig)
         {
             _chestConfig = chestConfig;
@@ -54,13 +53,44 @@ namespace Modules.Chest.Model
             List<DropItemConfig> drops = new List<DropItemConfig>();
             int dropCount = UnityEngine.Random.Range(_chestConfig.MinDrops, _chestConfig.MaxDrops + 1);
 
-            DropItemConfig selectedDrop = _chestConfig.GetRandomDrop();
+            DropItemConfig selectedDrop = GetRandomDrop();
             for (int i = 0; i < dropCount; i++)
             {
-                drops.Add(selectedDrop);
+                if (selectedDrop != null)
+                {
+                    drops.Add(selectedDrop);
+                }
             }
 
             return drops;
+        }
+
+        private DropItemConfig GetRandomDrop()
+        {
+            float totalWeight = 0f;
+            foreach (var drop in _chestConfig.DropTable)
+            {
+                totalWeight += drop.Weight;
+            }
+
+            if (totalWeight <= 0f)
+            {
+                return null;
+            }
+
+            float randomValue = UnityEngine.Random.Range(0f, totalWeight);
+            float cumulativeWeight = 0f;
+
+            foreach (var drop in _chestConfig.DropTable)
+            {
+                cumulativeWeight += drop.Weight;
+                if (randomValue <= cumulativeWeight)
+                {
+                    return drop.ItemConfig;
+                }
+            }
+
+            return _chestConfig.DropTable.Length > 0 ? _chestConfig.DropTable[0].ItemConfig : null;
         }
     }
 }

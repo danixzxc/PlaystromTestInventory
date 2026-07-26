@@ -33,13 +33,8 @@ namespace Modules.Drop.View
         }
         public override void OnSpawn()
         {
-            gameObject.SetActive(true);
             gameObject.transform.localScale = _defaultScale;
         }
 
-        public override void OnDespawn()
-        {
-            gameObject.SetActive(false);
-        }
     }
 }
