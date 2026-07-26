@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: HealthDropConfig
   m_EditorClassIdentifier: 
   ItemType: 2
-  Icon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  Icon: {fileID: -344291286, guid: 40f64e61d64928648b09c108fd2545b5, type: 3}
   Value: 5
   Prefab: {fileID: 661222973799686418, guid: a89a907bf2bdec841aef1428eb856291, type: 3}
