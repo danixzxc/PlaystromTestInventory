@@ -45,7 +45,7 @@ namespace Modules.Drop.Factory
                 0f
             );
 
-            _itemMovementService.DropToGround(dropView, groundPosition, () =>
+            _itemMovementService.DropToGround(dropView.transform, groundPosition, () =>
             {
                 DropItemPresenter presenter = new DropItemPresenter(dropView, config, _itemMovementService);
                 if (onCollected != null)

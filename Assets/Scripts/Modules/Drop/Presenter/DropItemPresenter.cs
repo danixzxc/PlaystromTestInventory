@@ -27,7 +27,11 @@ namespace Modules.Drop.Presenter
         private void OnItemClicked()
         {
             _view.OnItemClicked.RemoveListener(OnItemClicked);
-            _itemMovementService.CollectItem(_view, _config, () => OnCollected?.Invoke());
+            _itemMovementService.CollectItem(_view.transform, _config, () =>
+            {
+                _view.ReturnToPool();
+                OnCollected?.Invoke();
+            });
         }
 
         public void Dispose()

@@ -4,15 +4,6 @@ using UnityEngine;
 
 namespace Modules.Chest.Model
 {
-    public enum ChestState
-    {
-        Spawning,
-        Idle,
-        Opened,
-        Collecting,
-        Disappearing,
-        Inactive
-    }
 
     public class ChestModel
     {

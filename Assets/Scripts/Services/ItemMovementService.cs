@@ -40,7 +40,7 @@ namespace Services
             };
         }
 
-        public void CollectItem(BaseDropItemView dropView, DropItemConfig config, Action onComplete = null)
+        public void CollectItem(Transform dropTransform, DropItemConfig config, Action onComplete = null)
         {
             RectTransform target = _targets[config.ItemType];
 
@@ -53,17 +53,16 @@ namespace Services
                 _bonusService.RegisterCollection(config.ItemType);
             }
 
-            _animationService.FlyToTarget(dropView.transform, Camera.main.ScreenToWorldPoint(target.position), () =>
+            _animationService.FlyToTarget(dropTransform, Camera.main.ScreenToWorldPoint(target.position), () =>
             {
                 ApplyCollection(config);
-                dropView.ReturnToPool();
                 onComplete?.Invoke();
             });
         }
 
-        public void DropToGround(BaseDropItemView dropView, Vector3 groundPosition, Action onComplete = null)
+        public void DropToGround(Transform dropTransform, Vector3 groundPosition, Action onComplete = null)
         {
-            _animationService.FlyToTarget(dropView.transform, groundPosition, () =>
+            _animationService.FlyToTarget(dropTransform, groundPosition, () =>
             {
                 onComplete?.Invoke();
             }, false);
