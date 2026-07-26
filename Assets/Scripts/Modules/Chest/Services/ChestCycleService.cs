@@ -1,4 +1,5 @@
 using Core.EventBus;
+using Data.ScriptableObjects;
 using DG.Tweening;
 using Modules.Chest.Events;
 using Modules.Chest.View;
@@ -10,12 +11,14 @@ namespace Modules.Chest.Services
     {
         private readonly ChestStateService _chestStateService;
         private readonly ChestView _chestView;
-        private readonly float _respawnDelay = 2f;
+        private readonly float _respawnDelay;
 
-        public ChestCycleService(ChestStateService chestStateService, ChestView chestView)
+        public ChestCycleService(ChestStateService chestStateService, ChestView chestView,
+            ChestConfig chestConfig)
         {
             _chestStateService = chestStateService;
             _chestView = chestView;
+            _respawnDelay = chestConfig.RespawnDelay;
             EventBus.Subscribe<ChestCollectedAllDropsEvent>(OnAllDropsCollected);
         }
 

@@ -1,6 +1,7 @@
+using DG.Tweening;
+using Modules.Inventory.View;
 using UnityEngine;
 using UnityEngine.Events;
-using DG.Tweening;
 
 namespace Modules.Chest.View
 {
@@ -11,6 +12,11 @@ namespace Modules.Chest.View
         [SerializeField] private float _spawnDuration = 0.8f;
         [SerializeField] private float _spawnStartY = 5f;
         [SerializeField] private Sprite _closedSprite;
+
+        [Header("Dotween Animation")]
+        [SerializeField] private Vector3 _punchScaleVector;
+        [SerializeField] private float _punchScaleDuration = 0.3f;
+        [SerializeField] private float _fadeDuration = 0.5f;
 
         public UnityEvent OnChestClicked = new UnityEvent();
         public UnityEvent OnSpawnComplete = new UnityEvent();
@@ -55,7 +61,7 @@ namespace Modules.Chest.View
         {
             _interactable = false;
             _animator.SetTrigger("Open");
-            transform.DOPunchScale(Vector3.one * 0.2f, 0.3f);
+            transform.DOPunchScale(_punchScaleVector, _punchScaleDuration);
         }
 
         public void PlayDisappearAnimation()
@@ -63,7 +69,7 @@ namespace Modules.Chest.View
             _interactable = false;
 
             _currentTween?.Kill();
-            _currentTween = _spriteRenderer.DOFade(0f, 0.5f)
+            _currentTween = _spriteRenderer.DOFade(0f, _fadeDuration)
                 .SetEase(Ease.InQuad);
         }
 

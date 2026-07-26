@@ -11,6 +11,8 @@ namespace Modules.Inventory.View
         [SerializeField] protected Image _iconImage;
         [SerializeField] protected float _tweenDuration = 0.3f;
         [SerializeField] protected float _scaleMultiplier = 1.3f;
+        [SerializeField] protected float _scaleInDurationMultiplier = 0.5f;
+        [SerializeField] protected float _scaleOutDurationMultiplier = 0.5f;
 
         public RectTransform RectTransform { get; private set; }
         protected Tweener _currentTweener;
@@ -39,12 +41,15 @@ namespace Modules.Inventory.View
             _currentTweener?.Kill();
             _iconImage.transform.localScale = Vector3.one;
 
+            float scaleInDuration = _tweenDuration * _scaleInDurationMultiplier;
+            float scaleOutDuration = _tweenDuration * _scaleOutDurationMultiplier;
+
             _currentTweener = _iconImage.transform
-                .DOScale(Vector3.one * _scaleMultiplier, _tweenDuration * 0.5f)
+                .DOScale(Vector3.one * _scaleMultiplier, scaleInDuration)
                 .OnComplete(() =>
                 {
                     _currentTweener = _iconImage.transform
-                        .DOScale(Vector3.one, _tweenDuration * 0.5f);
+                        .DOScale(Vector3.one, scaleOutDuration);
                 });
         }
     }
