@@ -7,7 +7,7 @@ using Zenject;
 
 namespace Modules.Chest.Presenter
 {
-    public class ChestPresenter : IInitializable
+    public class ChestPresenter
     {
         private readonly ChestModel _model;
         private readonly ChestStateService _chestStateService;
@@ -23,7 +23,8 @@ namespace Modules.Chest.Presenter
             _chestCycleService = chestCycleService;
         }
 
-        public void Initialize()
+        [Inject]
+        private void Init()
         {
             _chestCycleService.StartCycle();
         }

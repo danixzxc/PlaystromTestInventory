@@ -141,7 +141,7 @@ private void BindPresenters()
             Container.Bind<CoinPresenter>().AsSingle().NonLazy();
             Container.Bind<CrystalPresenter>().AsSingle().NonLazy();
             Container.Bind<HealthPresenter>().AsSingle().NonLazy();
-            Container.BindInterfacesAndSelfTo<ChestPresenter>().AsSingle().NonLazy();
+            Container.Bind<ChestPresenter>().AsSingle().NonLazy();
             Container.Bind<BonusPresenter>().AsSingle().NonLazy();
         }
     }
