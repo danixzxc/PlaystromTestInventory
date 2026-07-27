@@ -23,6 +23,7 @@ namespace Modules.Chest.Services
             _view = view;
             _dropItemFactory = dropItemFactory;
 
+            _view.OnChestSpawnStarted.AddListener(OnSpawnStarted);
             _view.OnChestClicked.AddListener(OnChestClicked);
             _view.OnChestOpenAnimationPeak.AddListener(OnOpenAnimationPeak);
             _view.OnSpawnComplete.AddListener(OnSpawnComplete);
@@ -37,6 +38,10 @@ namespace Modules.Chest.Services
 
             _model.SetState(ChestState.Spawning);
             _view.PlaySpawnAnimation(position);
+        }
+        private void OnSpawnStarted()
+        {
+            EventBus.Fire(new ChestSpawnedEvent());
         }
 
         private void OnSpawnComplete()

@@ -18,6 +18,7 @@ namespace Modules.Chest.View
         [SerializeField] private float _punchScaleDuration = 0.3f;
         [SerializeField] private float _fadeDuration = 0.5f;
 
+        public UnityEvent OnChestSpawnStarted = new UnityEvent();
         public UnityEvent OnChestClicked = new UnityEvent();
         public UnityEvent OnSpawnComplete = new UnityEvent();
         public UnityEvent OnChestOpenAnimationPeak = new UnityEvent();
@@ -45,6 +46,10 @@ namespace Modules.Chest.View
             _currentTween?.Kill();
             _currentTween = transform.DOMoveY(targetPosition.y, _spawnDuration)
                 .SetEase(Ease.OutBounce)
+                .OnStart(() =>
+                {
+                OnChestSpawnStarted.Invoke();
+                })
                 .OnComplete(() =>
                 {
                     OnSpawnComplete.Invoke();

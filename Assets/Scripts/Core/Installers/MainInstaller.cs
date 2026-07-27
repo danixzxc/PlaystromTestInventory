@@ -46,6 +46,9 @@ namespace Core.Installers
         [SerializeField] private int _poolInitialSize = 10;
         [SerializeField] private Transform _poolParent;
 
+        [Header("Audio")]
+        [SerializeField] private AudioConfig _audioConfig;
+        [SerializeField] private AudioSource _audioSourcePrefab;
         public override void InstallBindings()
         {
             BindConfigs();
@@ -64,6 +67,7 @@ namespace Core.Installers
             Container.Bind<ChestConfig>().FromInstance(_chestConfig).AsSingle();
             Container.Bind<InventoryConfig>().FromInstance(_inventoryConfig).AsSingle();
             Container.Bind<BonusConfig>().FromInstance(_bonusConfig).AsSingle();
+            Container.Bind<AudioConfig>().FromInstance(_audioConfig).AsSingle();
         }
 
         private void BindModels()
@@ -120,9 +124,11 @@ namespace Core.Installers
 
         private void BindServices()
         {
+            Container.Bind<AudioSource>().FromInstance(_audioSourcePrefab).AsSingle();
             Container.Bind<AnimationService>().AsSingle();
             Container.Bind<ItemMovementService>().AsSingle();
             Container.Bind<BonusService>().AsSingle();
+            Container.Bind<AudioService>().AsSingle().NonLazy();
         }
 
         private void BindChestServices()
